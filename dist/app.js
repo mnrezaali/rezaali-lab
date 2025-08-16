@@ -32,6 +32,12 @@ export class LabApp {
                         status: 'available',
                         url: 'prompt-generator.html'
                     },
+                    {
+                        name: 'Presentation Analyser',
+                        description: 'Analyze vocal delivery, body language, and content structure',
+                        status: 'available',
+                        url: 'presentation-analyser.html'
+                    },
                     { id: 'pitch-polisher', name: 'Pitch Polisher', description: 'Refines a rough pitch draft into a concise, clear elevator pitch.', category: 'presentations', status: 'coming_soon' },
                     { id: 'audience-analyzer', name: 'Audience Analyzer', description: 'Captures live audience sentiment via word clouds and polls during a pitch to provide real-time feedback.', category: 'presentations', status: 'coming_soon' },
                     { id: 'verbal-analyser', name: 'Verbal Analyser', description: 'Provides a report on a speaker\'s vocal delivery, including filler words, pace, and clarity.', category: 'presentations', status: 'coming_soon' },
