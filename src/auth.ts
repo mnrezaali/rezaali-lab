@@ -165,11 +165,12 @@ export class AuthService {
     return result;
   }
 
-  static addUserCode(expiryDate: Date): UserCode {
+  static addUserCode(expiryDate: Date, notes: string = ''): UserCode {
     const codes = this.getUserCodes();
     const newCode: UserCode = {
       id: 'code_' + Date.now(),
       code: this.generateCode(),
+      notes,
       expiryDate,
       isActive: true,
       createdAt: new Date()

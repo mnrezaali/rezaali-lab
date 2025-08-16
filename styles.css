@@ -458,6 +458,235 @@ footer p {
     font-size: 0.9rem;
 }
 
+/* Guest Access Section */
+.guest-access-section {
+    margin-top: 1.5rem;
+}
+
+.divider {
+    text-align: center;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.divider span {
+    background: rgba(30, 30, 50, 0.95);
+    padding: 0 1rem;
+    color: #90a4ae;
+    font-size: 0.9rem;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-guest {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+    border: 1px solid #ff9800;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.btn-guest:hover {
+    background: rgba(255, 152, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-guest:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.guest-disabled-message {
+    text-align: center;
+    color: #f44336;
+    font-size: 0.9rem;
+    padding: 1rem;
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+/* Welcome Content */
+.welcome-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.welcome-message {
+    margin-bottom: 2rem;
+}
+
+.welcome-message p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #b0bec5;
+}
+
+.welcome-message a {
+    color: #4fc3f7;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.welcome-message a:hover {
+    text-decoration: underline;
+}
+
+.signature {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(55, 71, 79, 0.2);
+    border-radius: 10px;
+    border-left: 4px solid #4fc3f7;
+}
+
+.signature p {
+    margin: 0;
+    color: #90a4ae;
+    font-size: 1rem;
+}
+
+.btn-enter-lab {
+    background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 2rem auto 0;
+    min-width: 200px;
+}
+
+.btn-enter-lab:hover {
+    background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+}
+
+/* Lab Dashboard */
+.lab-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    color: #4fc3f7;
+    margin: 0;
+}
+
+.dashboard-content {
+    padding: 0;
+}
+
+.workshops-grid {
+    display: grid;
+    gap: 3rem;
+}
+
+.workshop-category {
+    background: rgba(55, 71, 79, 0.2);
+    border-radius: 15px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.workshop-category h3 {
+    color: #4fc3f7;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.mini-apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.mini-app-card {
+    background: rgba(30, 30, 50, 0.5);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mini-app-card:hover {
+    background: rgba(30, 30, 50, 0.7);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.mini-app-card h4 {
+    color: #4fc3f7;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.mini-app-card p {
+    color: #b0bec5;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.app-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.app-status.coming-soon {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
+
+/* Code Notes */
+.code-notes {
+    font-size: 0.9rem;
+    color: #81c784;
+    font-style: italic;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -469,7 +698,7 @@ footer p {
         font-size: 2rem;
     }
     
-    .main-header {
+    .main-header, .dashboard-header {
         flex-direction: column;
         text-align: center;
     }
@@ -487,5 +716,17 @@ footer p {
     .form-actions .btn-primary,
     .form-actions .btn-secondary {
         width: 100%;
+    }
+    
+    .mini-apps-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+    
+    .welcome-message p {
+        font-size: 1rem;
     }
 }

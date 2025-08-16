@@ -1,6 +1,7 @@
 export interface UserCode {
   id: string;
   code: string;
+  notes: string;
   expiryDate: Date;
   isActive: boolean;
   createdAt: Date;
@@ -47,4 +48,18 @@ export interface AdminPanelState {
   selectedCodes: string[];
   sortBy: 'createdAt' | 'expiryDate' | 'lastUsed';
   filterActive: boolean | null;
+}
+
+export interface MiniApp {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  status: 'coming_soon' | 'available';
+}
+
+export interface Workshop {
+  id: string;
+  name: string;
+  apps: MiniApp[];
 }

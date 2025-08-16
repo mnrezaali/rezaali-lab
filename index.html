@@ -24,7 +24,6 @@
                                 type="password" 
                                 id="accessCode" 
                                 name="accessCode" 
-                                required 
                                 placeholder="Enter your access code"
                                 autocomplete="off"
                             >
@@ -37,6 +36,18 @@
                     <button type="submit" id="submitBtn" class="btn-primary">
                         Enter Lab
                     </button>
+                    
+                    <div id="guestAccessSection" class="guest-access-section">
+                        <div class="divider">
+                            <span>OR</span>
+                        </div>
+                        <button type="button" id="guestAccessBtn" class="btn-guest">
+                            Enter as Guest
+                        </button>
+                        <div id="guestDisabledMessage" class="guest-disabled-message" style="display: none;">
+                            Guest Access deactivated. Please contact administrator.
+                        </div>
+                    </div>
                     
                     <div id="loadingSpinner" class="loading-spinner" style="display: none;">
                         <div class="spinner"></div>
@@ -60,9 +71,42 @@
             </header>
             
             <main>
-                <div class="content">
-                    <p>Welcome to the lab! You now have access to the system.</p>
-                    <p>Your access level determines what features are available to you.</p>
+                <div class="welcome-content">
+                    <div class="welcome-message">
+                        <p>Welcome to the Lab, a place where innovation, experimentation, and practical application come together. This is a living testament to my philosophy of "Make Everything a Learning Experience," and a direct reflection of my personal journey from a tech observer to a hands-on builder.</p>
+                        
+                        <p>The apps you see here aren't just experiments. They are a core component of my workshop and consulting services, designed to provide a tangible, hands-on experience for my clients. This is what makes my approach unique—we move beyond theory and into the real-world application of AI.</p>
+                        
+                        <p>I invite you to explore the tools in the Lab. You can see my ideas in action and discover a new way of working.</p>
+                        
+                        <p>For a deeper look into the strategic thinking behind these tools, you can read my articles here: <a href="https://rezaali.my/blog" target="_blank">rezaali.my/blog</a></p>
+                        
+                        <div class="signature">
+                            <p><strong>Reza Ali</strong><br>
+                            August 2025<br>
+                            KL Malaysia</p>
+                        </div>
+                    </div>
+                    
+                    <button id="enterLabBtn" class="btn-enter-lab">Enter Lab</button>
+                </div>
+            </main>
+        </section>
+
+        <!-- Lab Dashboard -->
+        <section id="labDashboard" class="lab-dashboard" style="display: none;">
+            <header class="dashboard-header">
+                <h1>Lab Dashboard</h1>
+                <div class="header-controls">
+                    <div id="dashboardAccessLevel" class="access-level"></div>
+                    <button id="backToWelcomeBtn" class="btn-secondary">Back</button>
+                    <button id="dashboardLogoutBtn" class="btn-secondary">Logout</button>
+                </div>
+            </header>
+            
+            <main class="dashboard-content">
+                <div class="workshops-grid" id="workshopsGrid">
+                    <!-- Workshop categories will be rendered here -->
                 </div>
             </main>
         </section>
@@ -93,6 +137,15 @@
                 
                 <div id="addCodeFormContainer" class="add-code-form" style="display: none;">
                     <form id="addCodeForm">
+                        <div class="form-group">
+                            <label for="codeNotes">Notes</label>
+                            <input 
+                                type="text" 
+                                id="codeNotes" 
+                                name="codeNotes" 
+                                placeholder="Enter notes for this code"
+                            >
+                        </div>
                         <div class="form-group">
                             <label for="expiryDate">Expiry Date</label>
                             <input 
