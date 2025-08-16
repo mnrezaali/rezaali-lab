@@ -51,11 +51,12 @@ export interface AdminPanelState {
 }
 
 export interface MiniApp {
-  id: string;
+  id?: string;
   name: string;
   description: string;
-  category: string;
+  category?: string;
   status: 'coming_soon' | 'available';
+  url?: string;
 }
 
 export interface Workshop {

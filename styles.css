@@ -730,3 +730,12 @@ footer p {
         font-size: 1rem;
     }
 }
+
+/* Clickable mini-app cards */
+.mini-app-card.clickable {
+    cursor: pointer;
+}
+
+.mini-app-card.clickable:hover {
+    background: rgba(99, 102, 241, 0.1);
+}

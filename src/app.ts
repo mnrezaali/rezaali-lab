@@ -34,6 +34,12 @@ export class LabApp {
         id: 'presentations',
         name: 'Presentations Workshop',
         apps: [
+          { 
+            name: 'AI Prompt Generator', 
+            description: 'Create professional AI assistant prompts',
+            status: 'available',
+            url: 'prompt-generator.html'
+          },
           { id: 'pitch-polisher', name: 'Pitch Polisher', description: 'Refines a rough pitch draft into a concise, clear elevator pitch.', category: 'presentations', status: 'coming_soon' },
           { id: 'audience-analyzer', name: 'Audience Analyzer', description: 'Captures live audience sentiment via word clouds and polls during a pitch to provide real-time feedback.', category: 'presentations', status: 'coming_soon' },
           { id: 'verbal-analyser', name: 'Verbal Analyser', description: 'Provides a report on a speaker\'s vocal delivery, including filler words, pace, and clarity.', category: 'presentations', status: 'coming_soon' },
@@ -450,10 +456,13 @@ export class LabApp {
 
     const workshopsHtml = this.workshops.map(workshop => {
       const appsHtml = workshop.apps.map(app => `
-        <div class="mini-app-card">
+        <div class="mini-app-card ${app.status === 'available' && app.url ? 'clickable' : ''}" 
+             ${app.status === 'available' && app.url ? `onclick="window.location.href='${app.url}'"` : ''}>
           <h4>${app.name}</h4>
           <p>${app.description}</p>
-          <div class="app-status coming-soon">Coming Soon</div>
+          <span class="status ${app.status === 'available' ? 'available' : 'coming-soon'}">
+            ${app.status === 'available' ? 'Available' : 'Coming Soon'}
+          </span>
         </div>
       `).join('');
 
