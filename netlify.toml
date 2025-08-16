@@ -1,22 +1,14 @@
 [build]
-  command = "npm run export"
-  publish = "out"
+  publish = "."
 
-[build.environment]
-  NEXT_TELEMETRY_DISABLED = "1"
-  NODE_VERSION = "18.0.0"
-  NPM_FLAGS = "--legacy-peer-deps"
-
-[dev]
-  command = "npm run dev"
-  port = 3000
-  publish = "out"
-  targetPort = 3000
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[dev]
-  framework = "#custom"
