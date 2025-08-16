@@ -1,0 +1,19 @@
+{
+  "name": "rezaali-lab",
+  "version": "1.0.0",
+  "description": "Reza Ali's Lab - User Management System",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "serve": "python3 -m http.server 8000",
+    "start": "npm run build && npm run serve"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["lab", "authentication", "typescript", "netlify"],
+  "author": "Reza Ali",
+  "license": "MIT"
+}
