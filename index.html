@@ -8,19 +8,120 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Welcome to Reza Ali's Lab</h1>
-            <p class="subtitle">Innovation • Creativity • Technology</p>
-        </header>
-        <main>
-            <div class="content">
-                <p>Hello World! This is the initial version of Reza Ali's Lab.</p>
-                <p>More exciting features coming soon...</p>
+        <!-- Login Section -->
+        <section id="loginSection" class="login-section">
+            <header>
+                <h1>Welcome to Reza Ali's Lab</h1>
+                <p class="subtitle">Innovation • Creativity • Technology</p>
+            </header>
+            
+            <div class="login-form-container">
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="accessCode">Access Code</label>
+                        <div class="password-input-container">
+                            <input 
+                                type="password" 
+                                id="accessCode" 
+                                name="accessCode" 
+                                required 
+                                placeholder="Enter your access code"
+                                autocomplete="off"
+                            >
+                            <button type="button" id="togglePassword" class="password-toggle">
+                                <span id="toggleIcon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="submitBtn" class="btn-primary">
+                        Enter Lab
+                    </button>
+                    
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <span>Authenticating...</span>
+                    </div>
+                </form>
+                
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div id="successMessage" class="success-message" style="display: none;"></div>
             </div>
-        </main>
+        </section>
+
+        <!-- Main Content -->
+        <section id="mainContent" class="main-content" style="display: none;">
+            <header class="main-header">
+                <h1>Reza Ali's Lab</h1>
+                <div class="header-controls">
+                    <div id="accessLevel" class="access-level"></div>
+                    <button id="logoutBtn" class="btn-secondary">Logout</button>
+                </div>
+            </header>
+            
+            <main>
+                <div class="content">
+                    <p>Welcome to the lab! You now have access to the system.</p>
+                    <p>Your access level determines what features are available to you.</p>
+                </div>
+            </main>
+        </section>
+
+        <!-- Admin Panel -->
+        <section id="adminPanel" class="admin-panel" style="display: none;">
+            <h2>Admin Panel</h2>
+            
+            <!-- Guest Access Toggle -->
+            <div class="admin-section">
+                <h3>Guest Access Control</h3>
+                <div class="toggle-container">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="guestToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Allow guest access</span>
+                </div>
+            </div>
+
+            <!-- User Code Management -->
+            <div class="admin-section">
+                <h3>User Code Management</h3>
+                
+                <button id="showAddCodeBtn" class="btn-primary">
+                    Add New Code
+                </button>
+                
+                <div id="addCodeFormContainer" class="add-code-form" style="display: none;">
+                    <form id="addCodeForm">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input 
+                                type="datetime-local" 
+                                id="expiryDate" 
+                                name="expiryDate" 
+                                required
+                            >
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Create Code</button>
+                            <button type="button" class="btn-secondary" onclick="document.getElementById('addCodeFormContainer').style.display='none'">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="codesContainer" class="codes-container">
+                    <!-- Codes will be rendered here -->
+                </div>
+            </div>
+        </section>
+
         <footer>
             <p>&copy; 2024 Reza Ali's Lab</p>
         </footer>
     </div>
+
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>
