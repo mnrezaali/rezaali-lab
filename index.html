@@ -27,7 +27,7 @@
                                 placeholder="Enter your access code"
                                 autocomplete="off"
                             >
-                            <button type="button" id="togglePassword" class="password-toggle">
+                            <button type="button" class="password-toggle" onclick="window.app.togglePasswordVisibility()">
                                 <span id="toggleIcon">👁️</span>
                             </button>
                         </div>
@@ -175,6 +175,6 @@
         </footer>
     </div>
 
-    <script type="module" src="src/main.js"></script>
+    <script type="module" src="dist/main.js"></script>
 </body>
 </html>

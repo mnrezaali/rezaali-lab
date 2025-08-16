@@ -1,0 +1,40 @@
+export declare class LabApp {
+    private state;
+    private adminState;
+    private workshops;
+    constructor();
+    private initializeWorkshops;
+    private init;
+    private loadInitialState;
+    private setupEventListeners;
+    private setupAdminEventListeners;
+    private checkSession;
+    private handleLogin;
+    private handleGuestLogin;
+    private handleLogout;
+    private showDashboard;
+    private showWelcome;
+    togglePasswordVisibility(): void;
+    private handleGuestToggle;
+    private handleAddCode;
+    private removeCodeHandler;
+    private toggleCodeHandler;
+    private setLoading;
+    private setError;
+    private clearError;
+    private showSuccess;
+    private render;
+    private renderAuthState;
+    private renderAccessLevel;
+    private renderGuestAccess;
+    private renderError;
+    private renderLoading;
+    private renderDashboard;
+    private renderAdminPanel;
+    private renderGuestToggle;
+    private renderAddCodeForm;
+    private renderCodesList;
+    toggleCode(codeId: string): void;
+    removeCode(codeId: string): void;
+}
+//# sourceMappingURL=app.d.ts.map

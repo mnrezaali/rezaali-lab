@@ -1,11 +1,9 @@
 import { LabApp } from './app.js';
-
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Create global app instance for button callbacks
     window.app = new LabApp();
 });
-
 // Handle session expiry
 setInterval(() => {
     if (window.app) {
@@ -16,3 +14,4 @@ setInterval(() => {
         }
     }
 }, 60000); // Check every minute
+//# sourceMappingURL=main.js.map

@@ -61,14 +61,16 @@ export class AuthService {
       };
     }
 
-    // Check guest access
-    if (this.isGuestAccessEnabled()) {
-      return {
-        success: true,
-        accessLevel: AccessLevel.GUEST,
-        message: 'Guest access granted',
-        sessionDuration: this.SESSION_DURATION[AccessLevel.GUEST]
-      };
+    // Check guest access - only if no code provided or code is empty
+    if (!code || code.trim() === '') {
+      if (this.isGuestAccessEnabled()) {
+        return {
+          success: true,
+          accessLevel: AccessLevel.GUEST,
+          message: 'Guest access granted',
+          sessionDuration: this.SESSION_DURATION[AccessLevel.GUEST]
+        };
+      }
     }
 
     return {

@@ -195,6 +195,9 @@ export class LabApp {
       this.state.isAuthenticated = true;
       
       this.showSuccess(authResult.message);
+      
+      // Clear the form
+      form.reset();
     } else {
       this.setError(authResult.message);
     }
@@ -253,14 +256,14 @@ export class LabApp {
     this.renderAccessLevel();
   }
 
-  private togglePasswordVisibility(): void {
+  public togglePasswordVisibility(): void {
     const passwordInput = document.getElementById('accessCode') as HTMLInputElement;
     const toggleIcon = document.getElementById('toggleIcon');
     
-    if (passwordInput.type === 'password') {
+    if (passwordInput && passwordInput.type === 'password') {
       passwordInput.type = 'text';
       if (toggleIcon) toggleIcon.textContent = '🙈';
-    } else {
+    } else if (passwordInput) {
       passwordInput.type = 'password';
       if (toggleIcon) toggleIcon.textContent = '👁️';
     }
