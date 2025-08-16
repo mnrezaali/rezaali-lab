@@ -93,28 +93,20 @@ class PromptGenerator {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let prompt = '';
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to generate prompt');
+            }
 
             this.showPromptContent();
             const contentEl = document.getElementById('promptContent');
-            contentEl.innerHTML = '';
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                prompt += chunk;
-                
-                // Format and display the prompt with streaming effect
-                contentEl.innerHTML = this.formatPrompt(prompt);
-                contentEl.scrollTop = contentEl.scrollHeight;
-            }
-
-            this.currentPrompt = prompt;
-            this.saveToHistory(purpose, prompt);
+            
+            // Simulate typing effect for better UX
+            this.typewriterEffect(contentEl, data.text);
+            
+            this.currentPrompt = data.text;
+            this.saveToHistory(purpose, data.text);
             this.showChatPanel();
             document.getElementById('copyBtn').classList.remove('hidden');
 
@@ -162,26 +154,19 @@ class PromptGenerator {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let newPrompt = '';
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to refine prompt');
+            }
 
             this.hideChatLoading();
             const contentEl = document.getElementById('promptContent');
-            contentEl.innerHTML = '';
+            
+            // Simulate typing effect for refinement
+            this.typewriterEffect(contentEl, data.text);
 
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                newPrompt += chunk;
-                
-                contentEl.innerHTML = this.formatPrompt(newPrompt);
-                contentEl.scrollTop = contentEl.scrollHeight;
-            }
-
-            this.currentPrompt = newPrompt;
+            this.currentPrompt = data.text;
             this.chatHistory.push(
                 { role: 'user', content: message },
                 { role: 'assistant', content: 'Updated prompt as requested.' }
@@ -196,6 +181,23 @@ class PromptGenerator {
             this.isGenerating = false;
             this.hideChatLoading();
         }
+    }
+
+    typewriterEffect(element, text) {
+        element.innerHTML = '';
+        let index = 0;
+        const speed = 20; // milliseconds per character
+        
+        const typeChar = () => {
+            if (index < text.length) {
+                const currentText = text.substring(0, index + 1);
+                element.innerHTML = this.formatPrompt(currentText);
+                index++;
+                setTimeout(typeChar, speed);
+            }
+        };
+        
+        typeChar();
     }
 
     formatPrompt(text) {

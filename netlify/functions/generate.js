@@ -72,38 +72,21 @@ exports.handler = async (event, context) => {
       throw new Error('Invalid request type');
     }
 
-    // Generate streaming response
-    const result = await model.generateContentStream(prompt);
-
-    // Create a readable stream for the response
-    const encoder = new TextEncoder();
-    let responseText = '';
-
-    const stream = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const chunk of result.stream) {
-            const chunkText = chunk.text();
-            responseText += chunkText;
-            controller.enqueue(encoder.encode(chunkText));
-          }
-          controller.close();
-        } catch (error) {
-          console.error('Streaming error:', error);
-          controller.error(error);
-        }
-      }
-    });
+    // Generate response
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
 
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'text/plain',
-        'Transfer-Encoding': 'chunked'
+        'Content-Type': 'application/json'
       },
-      body: stream,
-      isBase64Encoded: false
+      body: JSON.stringify({ 
+        text: text,
+        success: true 
+      })
     };
 
   } catch (error) {
