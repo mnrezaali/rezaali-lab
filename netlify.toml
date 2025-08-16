@@ -1,5 +1,9 @@
 [build]
   publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  directory = "netlify/functions"
 
 [[headers]]
   for = "/*"
@@ -7,6 +11,11 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
