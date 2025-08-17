@@ -42,17 +42,17 @@ export default function App() {
     }
   };
 
-  const handleContextSubmit = (contextData: PresentationContext) => {
+  const handleContextSubmit = (contextData) => {
     setContext(contextData);
     setState('transcript');
   };
 
-  const handleTranscriptSubmit = (transcriptData: string) => {
+  const handleTranscriptSubmit = (transcriptData) => {
     setTranscript(transcriptData);
-    handleAnalysis(context!, transcriptData);
+    handleAnalysis(context, transcriptData);
   };
 
-  const handleAnalysis = async (contextData: PresentationContext, transcriptData: string) => {
+  const handleAnalysis = async (contextData, transcriptData) => {
     setState('loading');
     setError('');
 
