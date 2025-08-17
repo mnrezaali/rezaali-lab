@@ -472,7 +472,7 @@ export class LabApp {
       const comingSoonApps = workshop.apps.filter(app => app.status === 'coming_soon');
       
       const renderApp = (app: any) => `
-        <div class="mini-app-card ${app.status === 'available' && app.url ? 'clickable' : 'coming-soon'}" 
+        <div class="mini-app-card ${app.status === 'coming_soon' ? 'coming-soon' : 'clickable'}" 
              ${app.status === 'available' && app.url ? `onclick="window.location.href='${app.url}'"` : ''}>
           <h4>${app.name}</h4>
           <p>${app.description}</p>
