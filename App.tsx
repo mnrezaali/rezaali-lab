@@ -7,15 +7,13 @@ import LoadingSpinner from './components/LoadingSpinner.tsx';
 import AnalysisReportComponent from './components/AnalysisReport.tsx';
 import { SunIcon, MoonIcon } from './components/icons.tsx';
 
-type AppState = 'context' | 'transcript' | 'loading' | 'report';
-
 export default function App() {
-  const [state, setState] = useState<AppState>('context');
-  const [context, setContext] = useState<PresentationContext | null>(null);
-  const [transcript, setTranscript] = useState<string>('');
-  const [analysisResult, setAnalysisResult] = useState<AnalysisReport | null>(null);
-  const [error, setError] = useState<string>('');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [state, setState] = useState('context');
+  const [context, setContext] = useState(null);
+  const [transcript, setTranscript] = useState('');
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [error, setError] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Initialize theme
   useEffect(() => {
