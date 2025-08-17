@@ -675,9 +675,20 @@ footer p {
 }
 
 .app-status.coming-soon {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
-    border: 1px solid #ffc107;
+    background: #374151;
+    color: #9ca3af;
+}
+
+.mini-app-card.coming-soon {
+    opacity: 0.7;
+    border-color: #374151;
+}
+
+.mini-app-card.coming-soon:hover {
+    border-color: #4b5563;
+    background: rgba(75, 85, 99, 0.1);
+    transform: none;
+    cursor: default;
 }
 
 /* Code Notes */
