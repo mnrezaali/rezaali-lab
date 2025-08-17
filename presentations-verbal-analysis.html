@@ -54,6 +54,21 @@
 </head>
 <body class="min-h-screen transition-colors duration-300">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <script src="./App.js"></script>
+    <script>
+      // Wait for DOM and React to be ready
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.App && window.React && window.ReactDOM) {
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(React.createElement(window.App));
+        } else {
+          console.error('Required dependencies not loaded:', {
+            App: !!window.App,
+            React: !!window.React,
+            ReactDOM: !!window.ReactDOM
+          });
+        }
+      });
+    </script>
 </body>
 </html>
