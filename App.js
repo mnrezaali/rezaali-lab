@@ -287,19 +287,35 @@ function App() {
               placeholder: "e.g., Senior executives, Technical team, General public"
             })
           ]),
+          React.createElement('div', {
+            key: 'comments-field'
+          }, [
+            React.createElement('label', {
+              key: 'label',
+              className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            }, 'Comments or Notes (Optional)'),
+            React.createElement('textarea', {
+              key: 'textarea',
+              id: 'comments',
+              rows: 3,
+              className: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white resize-vertical",
+              placeholder: "Any specific areas you'd like feedback on, context about the presentation, or notes for the AI coach..."
+            })
+          ]),
           React.createElement('button', {
             key: 'submit',
             onClick: () => {
               const title = document.getElementById('title').value;
               const purpose = document.getElementById('purpose').value;
               const audience = document.getElementById('audience').value;
+              const comments = document.getElementById('comments').value;
               
               if (!title || !purpose || !audience) {
                 alert('Please fill in all required fields');
                 return;
               }
               
-              handleContextSubmit({ title, purpose, audience });
+              handleContextSubmit({ title, purpose, audience, comments });
             },
             className: "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           }, 'Continue to Transcript')
@@ -449,12 +465,20 @@ function App() {
             }, [
               React.createElement('h3', {
                 key: 'title',
-                className: "font-semibold text-blue-900 dark:text-blue-200"
+                className: "font-semibold text-blue-900 dark:text-blue-200 mb-2"
               }, 'Overall Score'),
               React.createElement('p', {
                 key: 'score',
-                className: "text-2xl font-bold text-blue-600 dark:text-blue-400"
-              }, `${analysisResult.overallScore || 'N/A'}/10`)
+                className: "text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2"
+              }, `${analysisResult.overallScore || 'N/A'}/10`),
+              React.createElement('p', {
+                key: 'justification',
+                className: "text-sm text-blue-800 dark:text-blue-300 mb-2"
+              }, analysisResult.overallJustification || 'No justification provided'),
+              React.createElement('p', {
+                key: 'improvement',
+                className: "text-xs text-blue-700 dark:text-blue-400 italic"
+              }, `To achieve 10/10: ${analysisResult.overallImprovement || 'No specific guidance provided'}`)
             ]),
             React.createElement('div', {
               key: 'clarity',
@@ -462,12 +486,20 @@ function App() {
             }, [
               React.createElement('h3', {
                 key: 'title',
-                className: "font-semibold text-green-900 dark:text-green-200"
+                className: "font-semibold text-green-900 dark:text-green-200 mb-2"
               }, 'Clarity'),
               React.createElement('p', {
                 key: 'score',
-                className: "text-2xl font-bold text-green-600 dark:text-green-400"
-              }, `${analysisResult.clarity?.score || 'N/A'}/10`)
+                className: "text-2xl font-bold text-green-600 dark:text-green-400 mb-2"
+              }, `${analysisResult.clarity?.score || 'N/A'}/10`),
+              React.createElement('p', {
+                key: 'justification',
+                className: "text-sm text-green-800 dark:text-green-300 mb-2"
+              }, analysisResult.clarity?.justification || analysisResult.clarity?.feedback || 'No justification provided'),
+              React.createElement('p', {
+                key: 'improvement',
+                className: "text-xs text-green-700 dark:text-green-400 italic"
+              }, `To achieve 10/10: ${analysisResult.clarity?.improvement || 'No specific guidance provided'}`)
             ]),
             React.createElement('div', {
               key: 'engagement',
@@ -475,14 +507,91 @@ function App() {
             }, [
               React.createElement('h3', {
                 key: 'title',
-                className: "font-semibold text-purple-900 dark:text-purple-200"
+                className: "font-semibold text-purple-900 dark:text-purple-200 mb-2"
               }, 'Engagement'),
               React.createElement('p', {
                 key: 'score',
-                className: "text-2xl font-bold text-purple-600 dark:text-purple-400"
-              }, `${analysisResult.engagement?.score || 'N/A'}/10`)
+                className: "text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2"
+              }, `${analysisResult.engagement?.score || 'N/A'}/10`),
+              React.createElement('p', {
+                key: 'justification',
+                className: "text-sm text-purple-800 dark:text-purple-300 mb-2"
+              }, analysisResult.engagement?.justification || analysisResult.engagement?.feedback || 'No justification provided'),
+              React.createElement('p', {
+                key: 'improvement',
+                className: "text-xs text-purple-700 dark:text-purple-400 italic"
+              }, `To achieve 10/10: ${analysisResult.engagement?.improvement || 'No specific guidance provided'}`)
             ])
           ]),
+          // Visual Flow Chart
+          analysisResult.flowData && React.createElement('div', {
+            key: 'flow-chart',
+            className: "bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg"
+          }, [
+            React.createElement('h3', {
+              key: 'title',
+              className: "font-semibold text-indigo-900 dark:text-indigo-200 mb-4"
+            }, 'Presentation Flow Analysis'),
+            React.createElement('div', {
+              key: 'chart',
+              className: "h-64 w-full"
+            }, React.createElement('svg', {
+              viewBox: "0 0 800 200",
+              className: "w-full h-full"
+            }, [
+              // Flow segments
+              ...analysisResult.flowData.map((segment, index) => {
+                const x = (index / (analysisResult.flowData.length - 1)) * 700 + 50;
+                const y = 100 - (segment.engagement * 30);
+                const color = segment.engagement > 7 ? '#10b981' : segment.engagement > 4 ? '#f59e0b' : '#ef4444';
+                
+                return [
+                  // Point
+                  React.createElement('circle', {
+                    key: `point-${index}`,
+                    cx: x,
+                    cy: y,
+                    r: 4,
+                    fill: color
+                  }),
+                  // Line to next point
+                  index < analysisResult.flowData.length - 1 && React.createElement('line', {
+                    key: `line-${index}`,
+                    x1: x,
+                    y1: y,
+                    x2: (((index + 1) / (analysisResult.flowData.length - 1)) * 700 + 50),
+                    y2: 100 - (analysisResult.flowData[index + 1].engagement * 30),
+                    stroke: color,
+                    strokeWidth: 2
+                  }),
+                  // Label
+                  React.createElement('text', {
+                    key: `label-${index}`,
+                    x: x,
+                    y: y - 10,
+                    textAnchor: 'middle',
+                    className: "text-xs fill-current text-gray-600 dark:text-gray-300"
+                  }, segment.section)
+                ];
+              }).flat().filter(Boolean),
+              // Baseline
+              React.createElement('line', {
+                key: 'baseline',
+                x1: 50,
+                y1: 100,
+                x2: 750,
+                y2: 100,
+                stroke: '#6b7280',
+                strokeWidth: 1,
+                strokeDasharray: '5,5'
+              })
+            ])),
+            React.createElement('p', {
+              key: 'legend',
+              className: "text-xs text-indigo-700 dark:text-indigo-300 mt-2"
+            }, 'Flow shows engagement levels throughout your presentation (Green: High, Yellow: Medium, Red: Low)')
+          ]),
+          
           React.createElement('div', {
             key: 'summary',
             className: "bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"

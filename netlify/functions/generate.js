@@ -37,13 +37,17 @@ Analyze the following presentation based on these criteria:
 CRITICAL: Respond with ONLY the JSON object below. No markdown, no code blocks, no backticks, no explanatory text. Start your response with { and end with }:
 {
   "overallScore": 8,
+  "overallJustification": "Explanation of why this overall score was given",
+  "overallImprovement": "Specific actions to achieve 10/10 overall",
   "clarity": {
     "score": 7,
-    "feedback": "Clear main points but could improve transitions"
+    "justification": "Detailed explanation of why this clarity score was given",
+    "improvement": "Specific actions to achieve 10/10 clarity"
   },
   "engagement": {
     "score": 8,
-    "feedback": "Good use of examples and storytelling"
+    "justification": "Detailed explanation of why this engagement score was given",
+    "improvement": "Specific actions to achieve 10/10 engagement"
   },
   "content": {
     "score": 9,
@@ -58,6 +62,12 @@ CRITICAL: Respond with ONLY the JSON object below. No markdown, no code blocks, 
     "feedback": "Well-tailored to the target audience"
   },
   "summary": "Brief executive summary of the presentation analysis",
+  "flowData": [
+    {"section": "Opening", "engagement": 6},
+    {"section": "Main Point 1", "engagement": 8},
+    {"section": "Main Point 2", "engagement": 7},
+    {"section": "Conclusion", "engagement": 9}
+  ],
   "strengths": [
     "Key strength 1",
     "Key strength 2",
@@ -124,6 +134,7 @@ exports.handler = async (event, context) => {
 - Title: ${context.title}
 - Purpose: ${context.purpose}
 - Target Audience: ${context.audience}
+${context.comments ? `- Additional Notes: ${context.comments}` : ''}
 
 **Transcript to Analyze:**
 ${transcript}`;
