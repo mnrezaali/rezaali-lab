@@ -34,7 +34,9 @@ Analyze the following presentation based on these criteria:
 4. **Delivery Style**: How effective is the speaking style and flow?
 5. **Audience Connection**: How well does it connect with the target audience?
 
-CRITICAL: Respond with ONLY the JSON object below. No markdown, no code blocks, no backticks, no explanatory text. Start your response with { and end with }:
+CRITICAL: Respond with ONLY the JSON object below. No markdown, no code blocks, no backticks, no explanatory text. Start your response with { and end with }.
+
+For flowData, analyze the transcript and break it into logical segments (e.g., "Opening", "Problem Statement", "Solution Overview", "Benefits", "Call to Action"). Rate each segment as 'good', 'average', or 'poor' based on clarity, engagement, and effectiveness. Provide detailed descriptions explaining each rating:
 {
   "overallScore": 8,
   "overallJustification": "Explanation of why this overall score was given",
@@ -63,10 +65,10 @@ CRITICAL: Respond with ONLY the JSON object below. No markdown, no code blocks, 
   },
   "summary": "Brief executive summary of the presentation analysis",
   "flowData": [
-    {"section": "Opening", "engagement": 6},
-    {"section": "Main Point 1", "engagement": 8},
-    {"section": "Main Point 2", "engagement": 7},
-    {"section": "Conclusion", "engagement": 9}
+    {"section": "Opening", "rating": "average", "description": "Detailed justification for this segment's rating"},
+    {"section": "Main Point 1", "rating": "good", "description": "Detailed justification for this segment's rating"},
+    {"section": "Main Point 2", "rating": "average", "description": "Detailed justification for this segment's rating"},
+    {"section": "Conclusion", "rating": "good", "description": "Detailed justification for this segment's rating"}
   ],
   "strengths": [
     "Key strength 1",

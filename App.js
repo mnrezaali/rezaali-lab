@@ -523,7 +523,7 @@ function App() {
               }, `To achieve 10/10: ${analysisResult.engagement?.improvement || 'No specific guidance provided'}`)
             ])
           ]),
-          // Visual Flow Chart
+          // Presentation Flow Chart
           analysisResult.flowData && React.createElement('div', {
             key: 'flow-chart',
             className: "bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg"
@@ -533,63 +533,104 @@ function App() {
               className: "font-semibold text-indigo-900 dark:text-indigo-200 mb-4"
             }, 'Presentation Flow Analysis'),
             React.createElement('div', {
-              key: 'chart',
-              className: "h-64 w-full"
-            }, React.createElement('svg', {
-              viewBox: "0 0 800 200",
-              className: "w-full h-full"
+              key: 'chart-container',
+              className: "relative",
+              style: { height: `${80 + (analysisResult.flowData.length * 40)}px` }
             }, [
-              // Flow segments
-              ...analysisResult.flowData.map((segment, index) => {
-                const x = (index / (analysisResult.flowData.length - 1)) * 700 + 50;
-                const y = 100 - (segment.engagement * 30);
-                const color = segment.engagement > 7 ? '#10b981' : segment.engagement > 4 ? '#f59e0b' : '#ef4444';
-                
-                return [
-                  // Point
-                  React.createElement('circle', {
-                    key: `point-${index}`,
-                    cx: x,
-                    cy: y,
-                    r: 4,
-                    fill: color
-                  }),
-                  // Line to next point
-                  index < analysisResult.flowData.length - 1 && React.createElement('line', {
-                    key: `line-${index}`,
-                    x1: x,
-                    y1: y,
-                    x2: (((index + 1) / (analysisResult.flowData.length - 1)) * 700 + 50),
-                    y2: 100 - (analysisResult.flowData[index + 1].engagement * 30),
-                    stroke: color,
-                    strokeWidth: 2
-                  }),
-                  // Label
-                  React.createElement('text', {
-                    key: `label-${index}`,
-                    x: x,
-                    y: y - 10,
-                    textAnchor: 'middle',
-                    className: "text-xs fill-current text-gray-600 dark:text-gray-300"
-                  }, segment.section)
-                ];
-              }).flat().filter(Boolean),
-              // Baseline
-              React.createElement('line', {
-                key: 'baseline',
-                x1: 50,
-                y1: 100,
-                x2: 750,
-                y2: 100,
-                stroke: '#6b7280',
-                strokeWidth: 1,
-                strokeDasharray: '5,5'
+              React.createElement('svg', {
+                key: 'chart',
+                className: "w-full h-full",
+                viewBox: `0 0 400 ${80 + (analysisResult.flowData.length * 40)}`
+              }, [
+                // Chart bars
+                ...analysisResult.flowData.map((segment, index) => {
+                  const y = 20 + (index * 40);
+                  const barHeight = 30;
+                  const barWidth = 250;
+                  const barX = 120;
+                  
+                  // Color mapping
+                  const getColor = (rating) => {
+                    switch(rating) {
+                      case 'good': return '#22c55e';
+                      case 'average': return '#f59e0b';
+                      case 'poor': return '#ef4444';
+                      default: return '#6b7280';
+                    }
+                  };
+                  
+                  const color = getColor(segment.rating);
+                  
+                  return [
+                    // Y-axis label (section name)
+                    React.createElement('text', {
+                      key: `label-${index}`,
+                      x: 110,
+                      y: y + (barHeight / 2) + 4,
+                      textAnchor: 'end',
+                      className: `text-sm fill-current ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`
+                    }, segment.section),
+                    
+                    // Bar
+                    React.createElement('rect', {
+                      key: `bar-${index}`,
+                      x: barX,
+                      y: y,
+                      width: barWidth,
+                      height: barHeight,
+                      fill: color,
+                      rx: 4,
+                      ry: 4,
+                      className: "cursor-pointer transition-opacity hover:opacity-80",
+                      onMouseEnter: (e) => {
+                        // Show tooltip
+                        const tooltip = document.getElementById('flow-tooltip');
+                        if (tooltip) {
+                          tooltip.style.display = 'block';
+                          tooltip.style.left = e.pageX + 10 + 'px';
+                          tooltip.style.top = e.pageY - 10 + 'px';
+                          tooltip.innerHTML = `
+                            <div class="bg-gray-900 text-white p-3 rounded-lg shadow-lg max-w-xs">
+                              <div class="font-semibold">${segment.section}</div>
+                              <div class="text-sm mt-1" style="color: ${color}">Rating: ${segment.rating.charAt(0).toUpperCase() + segment.rating.slice(1)}</div>
+                              <div class="text-sm mt-2">${segment.description}</div>
+                            </div>
+                          `;
+                        }
+                      },
+                      onMouseLeave: () => {
+                        // Hide tooltip
+                        const tooltip = document.getElementById('flow-tooltip');
+                        if (tooltip) {
+                          tooltip.style.display = 'none';
+                        }
+                      }
+                    }),
+                    
+                    // In-bar label (rating)
+                    React.createElement('text', {
+                      key: `rating-${index}`,
+                      x: barX + (barWidth / 2),
+                      y: y + (barHeight / 2) + 4,
+                      textAnchor: 'middle',
+                      className: "text-sm font-bold fill-white"
+                    }, segment.rating.charAt(0).toUpperCase() + segment.rating.slice(1))
+                  ];
+                }).flat()
+              ]),
+              
+              // Tooltip container
+              React.createElement('div', {
+                key: 'tooltip',
+                id: 'flow-tooltip',
+                className: "absolute pointer-events-none z-10",
+                style: { display: 'none' }
               })
-            ])),
+            ]),
             React.createElement('p', {
               key: 'legend',
-              className: "text-xs text-indigo-700 dark:text-indigo-300 mt-2"
-            }, 'Flow shows engagement levels throughout your presentation (Green: High, Yellow: Medium, Red: Low)')
+              className: "text-xs text-indigo-700 dark:text-indigo-300 mt-4"
+            }, 'Hover over bars to see detailed feedback for each presentation segment')
           ]),
           
           React.createElement('div', {
