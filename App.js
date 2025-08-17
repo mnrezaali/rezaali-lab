@@ -17,7 +17,24 @@ async function analyzePresentation(context, transcript) {
   }
 
   const data = await response.json();
-  return JSON.parse(data.text);
+  
+  // Clean and parse the JSON response
+  let cleanText = data.text;
+  
+  // Remove markdown code blocks if present
+  cleanText = cleanText.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
+  
+  // Remove any leading/trailing whitespace or newlines
+  cleanText = cleanText.replace(/^\s+|\s+$/g, '');
+  
+  try {
+    return JSON.parse(cleanText);
+  } catch (parseError) {
+    console.error('JSON Parse Error:', parseError);
+    console.error('Raw text:', data.text);
+    console.error('Cleaned text:', cleanText);
+    throw new Error('Failed to parse analysis results. Please try again.');
+  }
 }
 
 // Pure JavaScript React App - No JSX/TypeScript

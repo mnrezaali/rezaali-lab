@@ -34,7 +34,7 @@ Analyze the following presentation based on these criteria:
 4. **Delivery Style**: How effective is the speaking style and flow?
 5. **Audience Connection**: How well does it connect with the target audience?
 
-You must respond with a valid JSON object in this exact format:
+IMPORTANT: You must respond with ONLY a valid JSON object. Do not include any markdown formatting, code blocks, or explanatory text. Return only the raw JSON:
 {
   "overallScore": 8,
   "clarity": {
@@ -135,7 +135,13 @@ ${transcript}`;
     // Generate response
     const result = await model.generateContent(prompt);
     const response = result.response;
-    const text = response.text();
+    let text = response.text();
+    
+    // Clean up markdown formatting for JSON responses
+    if (type === 'analyze') {
+      // Remove markdown code blocks if present
+      text = text.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
+    }
 
     return {
       statusCode: 200,
