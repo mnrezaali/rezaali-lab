@@ -34,7 +34,7 @@ Analyze the following presentation based on these criteria:
 4. **Delivery Style**: How effective is the speaking style and flow?
 5. **Audience Connection**: How well does it connect with the target audience?
 
-IMPORTANT: You must respond with ONLY a valid JSON object. Do not include any markdown formatting, code blocks, or explanatory text. Return only the raw JSON:
+CRITICAL: Respond with ONLY the JSON object below. No markdown, no code blocks, no backticks, no explanatory text. Start your response with { and end with }:
 {
   "overallScore": 8,
   "clarity": {
@@ -139,8 +139,28 @@ ${transcript}`;
     
     // Clean up markdown formatting for JSON responses
     if (type === 'analyze') {
-      // Remove markdown code blocks if present
-      text = text.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
+      // More aggressive cleaning for markdown formatting
+      text = text
+        .replace(/```json/gi, '')  // Remove ```json (case insensitive)
+        .replace(/```/g, '')       // Remove any remaining ```
+        .replace(/`/g, '')         // Remove any backticks
+        .trim();                   // Remove whitespace
+      
+      // Extract JSON object only
+      const jsonStart = text.indexOf('{');
+      const jsonEnd = text.lastIndexOf('}');
+      
+      if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+        text = text.substring(jsonStart, jsonEnd + 1);
+      }
+      
+      // Validate JSON before sending
+      try {
+        JSON.parse(text);
+      } catch (e) {
+        console.error('Invalid JSON generated:', text);
+        throw new Error('Generated response is not valid JSON');
+      }
     }
 
     return {

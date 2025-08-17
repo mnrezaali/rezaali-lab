@@ -21,11 +21,20 @@ async function analyzePresentation(context, transcript) {
   // Clean and parse the JSON response
   let cleanText = data.text;
   
-  // Remove markdown code blocks if present
-  cleanText = cleanText.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
+  // More aggressive cleaning for markdown formatting
+  cleanText = cleanText
+    .replace(/```json/gi, '')  // Remove ```json (case insensitive)
+    .replace(/```/g, '')       // Remove any remaining ```
+    .replace(/`/g, '')         // Remove any backticks
+    .trim();                   // Remove whitespace
   
-  // Remove any leading/trailing whitespace or newlines
-  cleanText = cleanText.replace(/^\s+|\s+$/g, '');
+  // Find JSON object boundaries
+  const jsonStart = cleanText.indexOf('{');
+  const jsonEnd = cleanText.lastIndexOf('}');
+  
+  if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+    cleanText = cleanText.substring(jsonStart, jsonEnd + 1);
+  }
   
   try {
     return JSON.parse(cleanText);
