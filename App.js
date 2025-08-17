@@ -1,3 +1,25 @@
+// Gemini Service Function
+async function analyzePresentation(context, transcript) {
+  const response = await fetch('/.netlify/functions/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      type: 'analyze',
+      context: context,
+      transcript: transcript
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Analysis failed: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return JSON.parse(data.text);
+}
+
 // Pure JavaScript React App - No JSX/TypeScript
 function App() {
   const [state, setState] = React.useState('context');
@@ -261,7 +283,97 @@ function App() {
       state === 'transcript' && React.createElement('div', {
         key: 'transcript',
         className: "max-w-4xl mx-auto"
-      }, 'Transcript Input Component'),
+      }, React.createElement('div', {
+        className: "bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+      }, [
+        React.createElement('div', {
+          key: 'header',
+          className: "flex items-center justify-between mb-6"
+        }, [
+          React.createElement('h2', {
+            key: 'title',
+            className: "text-2xl font-bold text-gray-900 dark:text-white"
+          }, 'Presentation Transcript'),
+          React.createElement('button', {
+            key: 'back',
+            onClick: handleBackToContext,
+            className: "text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          }, '← Back to Context')
+        ]),
+        React.createElement('p', {
+          key: 'desc',
+          className: "text-gray-600 dark:text-gray-300 mb-6"
+        }, 'Paste your presentation transcript below. Our AI will analyze your delivery, content structure, and provide detailed feedback.'),
+        React.createElement('div', {
+          key: 'form',
+          className: "space-y-4"
+        }, [
+          React.createElement('div', {
+            key: 'textarea-container'
+          }, [
+            React.createElement('label', {
+              key: 'label',
+              className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            }, 'Presentation Transcript'),
+            React.createElement('textarea', {
+              key: 'textarea',
+              id: 'transcript-input',
+              rows: 12,
+              className: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white resize-vertical",
+              placeholder: "Paste your presentation transcript here...\n\nExample:\nGood morning everyone, thank you for joining today's presentation.\nToday I'll be discussing our Q3 results and the strategic initiatives for the upcoming quarter...",
+              onChange: (e) => {
+                const wordCount = e.target.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+                const counter = document.getElementById('word-counter');
+                if (counter) {
+                  counter.textContent = `${wordCount} words`;
+                }
+              }
+            })
+          ]),
+          React.createElement('div', {
+            key: 'counter',
+            className: "flex justify-between items-center text-sm text-gray-500 dark:text-gray-400"
+          }, [
+            React.createElement('span', {
+              key: 'counter-text',
+              id: 'word-counter'
+            }, '0 words'),
+            React.createElement('span', {
+              key: 'tip'
+            }, 'Tip: Include verbal fillers, pauses, and natural speech patterns for better analysis')
+          ]),
+          React.createElement('div', {
+            key: 'buttons',
+            className: "flex space-x-4 pt-4"
+          }, [
+            React.createElement('button', {
+              key: 'back-btn',
+              onClick: handleBackToContext,
+              className: "px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            }, 'Back'),
+            React.createElement('button', {
+              key: 'analyze-btn',
+              onClick: () => {
+                const textarea = document.getElementById('transcript-input');
+                const transcriptText = textarea.value.trim();
+                
+                if (!transcriptText) {
+                  alert('Please enter your presentation transcript');
+                  return;
+                }
+                
+                if (transcriptText.split(/\s+/).length < 50) {
+                  alert('Please provide a more substantial transcript (at least 50 words) for meaningful analysis');
+                  return;
+                }
+                
+                handleTranscriptSubmit(transcriptText);
+              },
+              className: "px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            }, 'Analyze Presentation')
+          ])
+        ])
+      ])),
       
       state === 'loading' && React.createElement('div', {
         key: 'loading',
@@ -277,10 +389,119 @@ function App() {
         }, 'Analyzing your presentation...')
       ]),
       
-      state === 'report' && React.createElement('div', {
+      state === 'report' && analysisResult && React.createElement('div', {
         key: 'report',
-        className: "max-w-4xl mx-auto"
-      }, 'Analysis Report Component')
+        className: "max-w-6xl mx-auto"
+      }, React.createElement('div', {
+        className: "bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+      }, [
+        React.createElement('div', {
+          key: 'header',
+          className: "flex items-center justify-between mb-6"
+        }, [
+          React.createElement('h2', {
+            key: 'title',
+            className: "text-2xl font-bold text-gray-900 dark:text-white"
+          }, 'Presentation Analysis Report'),
+          React.createElement('button', {
+            key: 'reset',
+            onClick: handleReset,
+            className: "px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
+          }, 'New Analysis')
+        ]),
+        React.createElement('div', {
+          key: 'content',
+          className: "space-y-6"
+        }, [
+          React.createElement('div', {
+            key: 'overview',
+            className: "grid grid-cols-1 md:grid-cols-3 gap-4"
+          }, [
+            React.createElement('div', {
+              key: 'overall',
+              className: "bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg"
+            }, [
+              React.createElement('h3', {
+                key: 'title',
+                className: "font-semibold text-blue-900 dark:text-blue-200"
+              }, 'Overall Score'),
+              React.createElement('p', {
+                key: 'score',
+                className: "text-2xl font-bold text-blue-600 dark:text-blue-400"
+              }, `${analysisResult.overallScore || 'N/A'}/10`)
+            ]),
+            React.createElement('div', {
+              key: 'clarity',
+              className: "bg-green-50 dark:bg-green-900/20 p-4 rounded-lg"
+            }, [
+              React.createElement('h3', {
+                key: 'title',
+                className: "font-semibold text-green-900 dark:text-green-200"
+              }, 'Clarity'),
+              React.createElement('p', {
+                key: 'score',
+                className: "text-2xl font-bold text-green-600 dark:text-green-400"
+              }, `${analysisResult.clarity?.score || 'N/A'}/10`)
+            ]),
+            React.createElement('div', {
+              key: 'engagement',
+              className: "bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg"
+            }, [
+              React.createElement('h3', {
+                key: 'title',
+                className: "font-semibold text-purple-900 dark:text-purple-200"
+              }, 'Engagement'),
+              React.createElement('p', {
+                key: 'score',
+                className: "text-2xl font-bold text-purple-600 dark:text-purple-400"
+              }, `${analysisResult.engagement?.score || 'N/A'}/10`)
+            ])
+          ]),
+          React.createElement('div', {
+            key: 'summary',
+            className: "bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"
+          }, [
+            React.createElement('h3', {
+              key: 'title',
+              className: "font-semibold text-gray-900 dark:text-white mb-2"
+            }, 'Executive Summary'),
+            React.createElement('p', {
+              key: 'text',
+              className: "text-gray-700 dark:text-gray-300"
+            }, analysisResult.summary || 'Analysis summary not available')
+          ]),
+          analysisResult.strengths && React.createElement('div', {
+            key: 'strengths',
+            className: "bg-green-50 dark:bg-green-900/20 p-4 rounded-lg"
+          }, [
+            React.createElement('h3', {
+              key: 'title',
+              className: "font-semibold text-green-900 dark:text-green-200 mb-2"
+            }, 'Key Strengths'),
+            React.createElement('ul', {
+              key: 'list',
+              className: "list-disc list-inside space-y-1 text-green-800 dark:text-green-300"
+            }, analysisResult.strengths.map((strength, index) => 
+              React.createElement('li', { key: index }, strength)
+            ))
+          ]),
+          analysisResult.improvements && React.createElement('div', {
+            key: 'improvements',
+            className: "bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg"
+          }, [
+            React.createElement('h3', {
+              key: 'title',
+              className: "font-semibold text-amber-900 dark:text-amber-200 mb-2"
+            }, 'Areas for Improvement'),
+            React.createElement('ul', {
+              key: 'list',
+              className: "list-disc list-inside space-y-1 text-amber-800 dark:text-amber-300"
+            }, analysisResult.improvements.map((improvement, index) => 
+              React.createElement('li', { key: index }, improvement)
+            ))
+          ])
+        ])
+      ]))
     ].filter(Boolean)),
     
     // Footer
