@@ -38,6 +38,12 @@ export class LabApp {
                         status: 'available',
                         url: 'presentation-analyser.html'
                     },
+                    {
+                        name: 'Presentations Verbal Analysis',
+                        description: 'AI-powered analysis of presentation transcripts with detailed feedback',
+                        status: 'available',
+                        url: 'presentations-verbal-analysis.html'
+                    },
                     { id: 'pitch-polisher', name: 'Pitch Polisher', description: 'Refines a rough pitch draft into a concise, clear elevator pitch.', category: 'presentations', status: 'coming_soon' },
                     { id: 'audience-analyzer', name: 'Audience Analyzer', description: 'Captures live audience sentiment via word clouds and polls during a pitch to provide real-time feedback.', category: 'presentations', status: 'coming_soon' },
                     { id: 'verbal-analyser', name: 'Verbal Analyser', description: 'Provides a report on a speaker\'s vocal delivery, including filler words, pace, and clarity.', category: 'presentations', status: 'coming_soon' },
@@ -406,8 +412,11 @@ export class LabApp {
         if (!workshopsGrid)
             return;
         const workshopsHtml = this.workshops.map(workshop => {
-            const appsHtml = workshop.apps.map(app => `
-        <div class="mini-app-card ${app.status === 'available' && app.url ? 'clickable' : ''}" 
+            // Separate available and coming soon apps
+            const availableApps = workshop.apps.filter(app => app.status === 'available');
+            const comingSoonApps = workshop.apps.filter(app => app.status === 'coming_soon');
+            const renderApp = (app) => `
+        <div class="mini-app-card ${app.status === 'coming_soon' ? 'coming-soon' : 'clickable'}" 
              ${app.status === 'available' && app.url ? `onclick="window.location.href='${app.url}'"` : ''}>
           <h4>${app.name}</h4>
           <p>${app.description}</p>
@@ -415,13 +424,32 @@ export class LabApp {
             ${app.status === 'available' ? 'Available' : 'Coming Soon'}
           </span>
         </div>
-      `).join('');
+      `;
+            let appsHtml = '';
+            if (availableApps.length > 0) {
+                appsHtml += `
+          <div class="section-label">
+            <h4 class="text-lg font-semibold text-green-400 mb-3">✅ Available</h4>
+          </div>
+          <div class="mini-apps-grid mb-6">
+            ${availableApps.map(renderApp).join('')}
+          </div>
+        `;
+            }
+            if (comingSoonApps.length > 0) {
+                appsHtml += `
+          <div class="section-label">
+            <h4 class="text-lg font-semibold text-gray-500 mb-3">🚧 Coming Soon</h4>
+          </div>
+          <div class="mini-apps-grid">
+            ${comingSoonApps.map(renderApp).join('')}
+          </div>
+        `;
+            }
             return `
         <div class="workshop-category">
           <h3>${workshop.name}</h3>
-          <div class="mini-apps-grid">
-            ${appsHtml}
-          </div>
+          ${appsHtml}
         </div>
       `;
         }).join('');
