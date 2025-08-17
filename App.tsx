@@ -4,7 +4,7 @@ import { analyzePresentation } from './services/geminiService.ts';
 import ContextForm from './components/ContextForm.tsx';
 import TranscriptInput from './components/TranscriptInput.tsx';
 import LoadingSpinner from './components/LoadingSpinner.tsx';
-import AnalysisReport from './components/AnalysisReport.tsx';
+import AnalysisReportComponent from './components/AnalysisReport.tsx';
 import { SunIcon, MoonIcon } from './components/icons.tsx';
 
 type AppState = 'context' | 'transcript' | 'loading' | 'report';
@@ -150,7 +150,7 @@ export default function App() {
         )}
 
         {state === 'report' && analysisResult && context && (
-          <AnalysisReport 
+          <AnalysisReportComponent 
             report={analysisResult}
             context={context}
             onReset={handleReset}
